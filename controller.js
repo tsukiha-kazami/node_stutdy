@@ -8,9 +8,17 @@ function addMapping(router,mapping){
             console.log(`register URL mapping: GET ${path}`);
         }else if (url.startsWith('post')){
             var path = url.substring(5);
-            router.get(path,mapping[url]);
+            router.post(path,mapping[url]);
             console.log(`register URL mapping: POST ${path}`);
-        }else{
+        } else if (url.startsWith('put ')) {
+            var path = url.substring(4);
+            router.put(path, mapping[url]);
+            console.log(`register URL mapping: PUT ${path}`);
+        } else if (url.startsWith('delete ')) {
+            var path = url.substring(7);
+            router.del(path, mapping[url]);
+            console.log(`register URL mapping: DELETE ${path}`);
+        } else{
             // 无效的URL:
             console.log(`invalid URL: ${url}`);
         }
@@ -18,7 +26,7 @@ function addMapping(router,mapping){
 } 
 function addControllers(router,dir){
     // 先导入fs模块，然后用readdirSync列出文件
-// 这里可以用sync是因为启动时只运行一次，不存在性能问题:
+    // 这里可以用sync是因为启动时只运行一次，不存在性能问题:
     var files = fs.readdirSync(__dirname +'/'+ dir);
     // 过滤出.js文件:
     var js_files = files.filter((f)=>{
@@ -29,13 +37,13 @@ function addControllers(router,dir){
         console.log(`process controller : ${f}`);
         //导入文件
         let mapping = require(__dirname+'/' +dir+'/' +f);
-        addMapping(mapping);
+        addMapping(router,mapping);
     }
 }
 
 module.exports =function(dir){
     let controller_dir = dir ||'controller';
-    let router=require('koa-router')();
+    let router = require('koa-router')();
     addControllers(router,controller_dir);
     return router.routes();
 
