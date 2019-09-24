@@ -8,7 +8,13 @@ const controller =require('./controller');
 
 const staticFiles =require('./static-files');
 const templating  = require('./templating');
+
+const config =require('./config');
 const isProduction = process.env.NODE_ENV === 'production';
+
+
+
+
 
 // if(!isProduction){
 //     let staticFiles =require('./static-files');
@@ -43,3 +49,51 @@ app.use(controller());
 // 在端口3000监听:
 app.listen(3000);
 console.log('app started at port 3000...');
+
+
+// var Pet= sequelize.define('pet',{
+//     id :{
+//         type : Sequelize.STRING(50),
+//         primaryKey : true 
+//     },
+//     name  : Sequelize.STRING(100),
+//     gender : Sequelize.BOOLEAN,
+//     birth: Sequelize.STRING(10),
+//     createdAt: Sequelize.BIGINT,
+//     updatedAt: Sequelize.BIGINT,
+//     version: Sequelize.BIGINT
+// },{
+//     timestamps:false
+// });
+
+var now = Date.now();
+
+(async () =>{
+    var dog =await Pet.create({
+        id:'d-'+now ,
+        name : 'gaffey',
+        gender :false,
+        birth: '2000-01-01',
+        createdAt:now ,
+        updatedAt:now,
+        version:0
+    });
+    console.log('created: '+JSON.stringify(dog));
+})();
+
+
+(async () =>{
+    var pets =await Pet.findAll({
+        where:{
+            name : 'gaffy'
+        }
+    });
+    console.log(`find pet ${pets.length} pets`);
+    for (let p of pets){
+        console.log(JSON.stringify(p));
+    }
+})();
+
+
+
+
