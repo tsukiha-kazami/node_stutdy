@@ -16,7 +16,7 @@ function staticFiles (url , dir){
                 //查找文件的mime
                 ctx.response.type =mime.lookup(rpath);
                 //读取文件内容并且赋值给response.body
-                ctx.response.body= await fs.readFile(File);
+                ctx.response.body= await fs.readFile(fp);
             }else{
                 ctx.response.status = 404;
             }

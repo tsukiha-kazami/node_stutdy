@@ -12,6 +12,7 @@ const templating  = require('./templating');
 const config =require('./config');
 const isProduction = process.env.NODE_ENV === 'production';
 
+const rest = require('./rest');
 
 
 
@@ -42,6 +43,9 @@ app.use(templating('views',{
     watch: !isProduction
 }))
 
+// bind .rest() for ctx:
+app.use(rest.restify());
+
 //fifth handle router url 
 app.use(controller());
 
@@ -66,33 +70,6 @@ console.log('app started at port 3000...');
 //     timestamps:false
 // });
 
-var now = Date.now();
-
-(async () =>{
-    var dog =await Pet.create({
-        id:'d-'+now ,
-        name : 'gaffey',
-        gender :false,
-        birth: '2000-01-01',
-        createdAt:now ,
-        updatedAt:now,
-        version:0
-    });
-    console.log('created: '+JSON.stringify(dog));
-})();
-
-
-(async () =>{
-    var pets =await Pet.findAll({
-        where:{
-            name : 'gaffy'
-        }
-    });
-    console.log(`find pet ${pets.length} pets`);
-    for (let p of pets){
-        console.log(JSON.stringify(p));
-    }
-})();
 
 
 

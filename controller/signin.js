@@ -17,5 +17,5 @@ var fn_signin = async(ctx,next)=> {
     }
 };
 module.exports = {
-    'post /signin': fn_signin
+    'POST /signin': fn_signin
 }

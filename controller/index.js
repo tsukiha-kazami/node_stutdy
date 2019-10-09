@@ -19,5 +19,5 @@ var fn_index = async (ctx, next)=> {
 module.exports  =  {
     // 'get /login': fn_login,
     
-    'get /':fn_index
+    'GET /':fn_index
 }
