@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+    <script src="/static/js/jquery.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/vue.js"></script>
+    <style>
+            #sheet {
+                table-layout: fixed;
+                min-width: auto;
+                margin-bottom: 0px;
+            }
+            #sheet tr>th {
+                width: 150px;
+                background-color: #e6e6e6;
+            }
+            #sheet tr>th:first-child {
+                width: 50px;
+                background-color: #e6e6e6;
+            }
+            #sheet tr>td {
+                width: 150px !important;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                text-wrap: none;
+                word-wrap: normal;
+                white-space: nowrap;
+            }
+            #sheet tr>td:first-child {
+                width: 50px;
+            }
+                </style>
+    <script>
+        'use strict';
+        $(function () {
+            var vue = new Vue({
+                el: '#sheet',
+                data: {
+                    title: 'new sheet',
+                    header: [
+                        { row: 0, col: 0, text: '' },
+                        { row: 0, col: 1, text: 'A' },
+                        { row: 0, col: 2, text: 'B' },
+                        { row: 0, col: 3, text: 'C' },
+                    ],
+                    rows: [
+                        [
+                            { row: 1, col: 0, text: '1' },
+                            { row: 1, col: 1, text: '2' },
+                            { row: 1, col: 2, text: '3' },
+                            { row: 1, col: 10, text: '4' },
+                        ],
+                        [
+                            { row: 2, col: 0, text: '2' },
+                            { row: 2, col: 1, text: '2' },
+                            { row: 2, col: 2, text: '3' },
+                            { row: 2, col: 10, text: '4' },
+                        ],
+                        [
+                            { row: 10, col: 0, text: '10' },
+                            { row: 10, col: 1, text: '11' },
+                            { row: 10, col: 2, text: '12' },
+                            { row: 10, col: 10, text: '13' },
+                        ]
+                    ],
+                    selectedRowIndex: 0, // 当前活动单元格的row
+                    selectedColIndex: 0 // 当前活动单元格的col
+                },
+                methods: {
+                    focus: function (cell) {
+                        this.selectedRowIndex = cell.row;
+                        this.selectedColIndex = cell.coll;
+                    },
+                    change: function (e) {
+                        var
+                            rowIndex = this.selectedRowIndex,
+                            colIndex = this.selectedColIndex,
+                            text;
+                        if (rowIndex > 0 && colIndex > 0) {
+                            text = e.target.innerText;
+                            this.rows[rowIndex - 1][colIndex].text = text;
+                        }
+                    }
+                }
+            });
+        })
+
+        function setAlign(align) {
+            var
+                rowIndex = vm.selectedRowIndex,
+                colIndex = vm.selectedColIndex,
+                row, cell;
+            if (rowIndex > 0 && colIndex > 0) {
+                row = vm.rows[rowIndex - 1];
+                cell = row[colIndex];
+                cell.align = align;
+            }
+        }
+        $('#cmd-left').click(function () { setAlign('left'); });
+        $('#cmd-center').click(function () { setAlign('center'); });
+        $('#cmd-right').click(function () { setAlign('right'); });
+    </script>
+</head>
+
+<body>
+    <div id="important"
+        style="position:absolute; margin:50px 0 35px 0; left: 0; right: 0; top: 0; bottom: 0; overflow:scroll;">
+        <table id='sheet'>
+            <thead>
+                <tr>
+                    <th v-for='cell in header' v-on:click='focus(cell)' v-text='cell.text'></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for='tr in rows'>
+                    <td v-for='cell in tr' v-on:click='focus(cell)' v-on:blur='change' v-text='cell.text'></td>
+                    <!-- v-bind:contenteditable='cell.contentEditable' v-bind:style='{textAlign：cell.align}'  -->
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+
+</html>
